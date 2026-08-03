@@ -68,7 +68,8 @@ const Home = () => {
       setSelectedImage(data);
     } catch (err) {
       console.error("[AI Studio] Generation failed:", err);
-      alert("Image generation failed. Please try again.");
+      const serverMsg = err.response?.data?.detail || err.message || "Server or network error";
+      alert(`Image generation failed: ${serverMsg}`);
     } finally {
       setLoading(false);
     }

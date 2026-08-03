@@ -54,13 +54,17 @@ def _generate_local(prompt, negative, steps, cfg, width, height):
 
 
 def _generate_pollinations(prompt, width, height):
-
+    import ssl
     encoded_prompt = urllib.parse.quote(prompt)
     seed = random.randint(1, 999999)
     url = (
-        f"https://image.pollinations.ai/p/{encoded_prompt}"
+        f"https://image.pollinations.ai/prompt/{encoded_prompt}"
         f"?width={width}&height={height}&seed={seed}&nologo=true"
     )
+
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
 
     max_retries = 2
     for attempt in range(max_retries):
@@ -69,11 +73,12 @@ def _generate_pollinations(prompt, width, height):
             req = urllib.request.Request(
                 url,
                 headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AI-Image-Studio/2.0"
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8"
                 },
             )
         
-            with urllib.request.urlopen(req, timeout=15) as response:
+            with urllib.request.urlopen(req, timeout=20, context=ctx) as response:
                 if response.status == 200:
                     img_data = response.read()
                     if len(img_data) > 1000:  
