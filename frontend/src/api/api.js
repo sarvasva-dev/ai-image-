@@ -7,6 +7,10 @@ const getBaseUrl = () => {
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       url = `https://${url}`;
     }
+    const hostPart = url.replace(/^https?:\/\//, "");
+    if (!hostPart.includes(".") && !hostPart.includes("localhost")) {
+      url = `${url}.onrender.com`;
+    }
     return url;
   }
   return "http://127.0.0.1:8000";

@@ -43,6 +43,10 @@ const Home = () => {
       if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
         baseUrl = `https://${baseUrl}`;
       }
+      const hostPart = baseUrl.replace(/^https?:\/\//, "");
+      if (!hostPart.includes(".") && !hostPart.includes("localhost")) {
+        baseUrl = `${baseUrl}.onrender.com`;
+      }
     }
     const leadingSlash = path.startsWith("/") ? "" : "/";
     return `${baseUrl}${leadingSlash}${path}`;
