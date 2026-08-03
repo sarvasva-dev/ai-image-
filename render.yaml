@@ -28,4 +28,4 @@ services:
         fromService:
           type: web
           name: ai-image-studio-backend
-          property: url
+          property: host

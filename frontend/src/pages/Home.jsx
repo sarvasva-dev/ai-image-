@@ -37,7 +37,13 @@ const Home = () => {
     const path = img.image_url || img.path || "";
     if (path.startsWith("http://") || path.startsWith("https://")) return path;
     const envUrl = import.meta.env.VITE_API_BASE_URL;
-    const baseUrl = (envUrl && envUrl.trim() !== "") ? envUrl.replace(/\/$/, "") : "http://127.0.0.1:8000";
+    let baseUrl = "http://127.0.0.1:8000";
+    if (envUrl && envUrl.trim() !== "") {
+      baseUrl = envUrl.trim().replace(/\/$/, "");
+      if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
+        baseUrl = `https://${baseUrl}`;
+      }
+    }
     const leadingSlash = path.startsWith("/") ? "" : "/";
     return `${baseUrl}${leadingSlash}${path}`;
   };

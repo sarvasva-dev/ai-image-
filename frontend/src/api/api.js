@@ -3,7 +3,11 @@ import axios from "axios";
 const getBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   if (envUrl && envUrl.trim() !== "") {
-    return envUrl.replace(/\/$/, "");
+    let url = envUrl.trim().replace(/\/$/, "");
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      url = `https://${url}`;
+    }
+    return url;
   }
   return "http://127.0.0.1:8000";
 };
