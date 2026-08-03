@@ -47,6 +47,8 @@ const Home = () => {
       if (!hostPart.includes(".") && !hostPart.includes("localhost")) {
         baseUrl = `${baseUrl}.onrender.com`;
       }
+    } else if (typeof window !== "undefined" && window.location.hostname.includes("onrender.com")) {
+      baseUrl = "https://ai-image-studio-backend-oyzz.onrender.com";
     }
     const leadingSlash = path.startsWith("/") ? "" : "/";
     return `${baseUrl}${leadingSlash}${path}`;
