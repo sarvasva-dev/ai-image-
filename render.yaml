@@ -1,0 +1,31 @@
+services:
+  # FastAPI Backend Web Service
+  - type: web
+    name: ai-image-studio-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
+      - key: IMAGE_FOLDER
+        value: images
+      - key: DATABASE_URL
+        value: sqlite:///./images.db
+
+  # React Vite Frontend Static Site
+  - type: web
+    name: ai-image-studio-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: ai-image-studio-backend
+          property: url
